@@ -1,5 +1,5 @@
 # read the data
-mydata<-read.csv("C:/Users/bhimi/Documents/R/R_proj/R_prog/Econometric/intro_auto.csv")
+mydata<-read.csv("intro_auto.csv")
 attach(mydata)
 #Define variables
 Y <- cbind(mpg)
