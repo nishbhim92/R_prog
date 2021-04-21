@@ -1,7 +1,6 @@
 #Install R and R studio 
 # https://cran.r-project.org/bin/windows/base/
 # https://www.rstudio.com/products/rstudio/download/ 
-
 #Working directory, set your working directory path and app name using setwd
 #setwd("C:/Users/####/####/Redditapp/") or your preferred path
 
