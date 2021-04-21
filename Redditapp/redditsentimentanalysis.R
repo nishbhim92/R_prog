@@ -1,30 +1,57 @@
+
+#Install R and R studio 
+# https://cran.r-project.org/bin/windows/base/
+# https://www.rstudio.com/products/rstudio/download/ 
+
 #Working directory, set your working directory path and app name using setwd
 #setwd("C:/Users/####/####/Redditapp/") or your preferred path
+
 #install RedditExtractor,tm,syuzhet using 
 #install.packages(RedditExtractoR") for first time use
 library("RedditExtractoR") #load RedditExtractor app
 # https://cran.r-project.org/web/packages/RedditExtractoR/RedditExtractoR.pdf
+
 library("tm") # tm is text mining library
 # https://cran.r-project.org/web/packages/tm/tm.pdf
+
 library("syuzhet") #syuzhet is an sentiment analysis library
 # https://cran.r-project.org/web/packages/syuzhet/vignettes/syuzhet-vignette.html
+
+library("igraph") #Network analysis library
+# https://igraph.org/r/
+library("tidyverse") # collection of some data science R packages https://www.tidyverse.org/
+
+
+
+
+
 #Extract required reddit links using this command in this case i am searching for "kingston" 
 # Number of pages to be searched for the given term is 2 in this case
 #Adjust number of pages based on your interest
-#https://cran.r-project.org/web/packages/RedditExtractoR/RedditExtractoR.pdf has commands related to reddit extraction
-
-kingstonlinks <- reddit_urls(
-  search_terms   = "kingston",
-  page_threshold = 2
-)
-#write into a csv
-write.csv(kingstonlinks,"kingstonlinks.csv")
-#read the csv
-file <- read.csv("kingstonlinks.csv")
 # if looking for specific subreddit use get_reddit command
-#Clean up data:
+kingstonlinks <- reddit_urls(search_terms   = "kingston",page_threshold = 2)
+#write into a csv or save as csv file format
+write.csv(kingstonlinks,"kingstonlinks.csv")
+
+#read the csv data
+file <- read.csv("kingstonlinks.csv")
+
+# Url with maximum number of comments
+max_comurl <- file %>% filter(num_comments == max(num_comments))
+
+
+# Network analysis of individual urls from the downloaded data
+# download url content of url 1 from the downloaded data
+url_content <- reddit_content(max_comurl$URL, wait_time = 2)
+write.csv(url_content$comment, "comment_cont.csv", row.names = FALSE)
+file2<-read.csv("comment_cont.csv")
+
+
+###########################################################################################
+# Text mining and sentiment analysis of reddit comment data
+#Clean up data of titles:
 #Corpus is collection of texts
-RedditCorpus <- Corpus(VectorSource(file$title))
+RedditCorpus <- Corpus(VectorSource(file2$x))
 #display 1 to 10 tweets
 inspect(RedditCorpus[1:10])
 # convert the texts to lowetcase
@@ -47,14 +74,16 @@ removeNonAscii<-function(x) textclean::replace_non_ascii(x)
 RedditCorpus<-tm_map(RedditCorpus,content_transformer(removeNonAscii))
 #remove some non essential words
 RedditCorpus<- tm_map(RedditCorpus,removeWords,c("amp","ufef",
-                                                   "ufeft","uufefuufefuufef","uufef","s"))  
+                                                 "ufeft","uufefuufefuufef","uufef","s"))  
 #remove white space
 RedditCorpus<- tm_map(RedditCorpus,stripWhitespace)
 
 # Now inspect the cleaned titles
 inspect(RedditCorpus[1:10])
-#Sentiment analysis:
 
+
+
+#Sentiment analysis:
 # find count of 8 emotions
 emotions<-get_nrc_sentiment(RedditCorpus$content)
 barplot(colSums(emotions),cex.names = .7,
@@ -62,20 +91,13 @@ barplot(colSums(emotions),cex.names = .7,
         main = "Sentiment scores for Reddit titles"
 )
 
-# sentiment positiviy rating
+
+# sentiment positive rating
 get_sentiment(RedditCorpus$content[1:10])
 sent<-get_sentiment(RedditCorpus$content)
-
-# mean of sentiment positivity
+# mean of sentiment positive score
 meanSent<-mean(sent)
 
-#display the mean of Reddit titles 
+#display the mean of Reddit titles sentiment score
 meanSent
-
-
-# Network analysis
-library("igraph")
-content <- reddit_content(file$URL[1])
-graph <- construct_graph(content, plot = TRUE)
-user <- user_network(content, include_author = TRUE, agg = TRUE)
-user$plot
+##################################################################################################################
