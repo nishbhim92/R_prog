@@ -1,0 +1,72 @@
+#Working directory, set your working directory path and app name using setwd
+#setwd("C:/Users/####/####/Redditapp/") or your preferred path
+#install RedditExtractor,tm,syuzhet using 
+#install.packages(RedditExtractoR") for first time use
+library("RedditExtractoR") #load RedditExtractor app
+library("tm") # tm is text mining library
+library("syuzhet") #syuzhet is an sentiment analysis library
+
+#Extract required reddit links using this command in this case i am searching for "kingston" 
+# Number of pages to be searched for the given term is 2 in this case
+#Adjust number of pages based on your interest
+#https://cran.r-project.org/web/packages/RedditExtractoR/RedditExtractoR.pdf has commands related to reddit extraction
+
+kingstonlinks <- reddit_urls(
+  search_terms   = "kingston",
+  page_threshold = 2
+)
+#write into a csv
+write.csv(kingstonlinks,"C:/Users/bhimi/Documents/R/R_proj/R_prog/Redditapp/kingstonlinks.csv")
+#read the csv
+file <- read.csv("kingstonlinks.csv")
+# if looking for specific subreddit use get_reddit command
+#Clean up data:
+#Corpus is collection of texts
+RedditCorpus <- Corpus(VectorSource(file$title))
+#display 1 to 10 tweets
+inspect(RedditCorpus[1:10])
+# convert the texts to lowetcase
+RedditCorpus<- tm_map(RedditCorpus, content_transformer(tolower))
+#remove stopwords such as and, the etc., language english
+RedditCorpus<- tm_map(RedditCorpus,removeWords,stopwords("en"))
+#remove numbers from tweets
+RedditCorpus<- tm_map( RedditCorpus,removeNumbers)
+#remove punctuations 
+RedditCorpus<- tm_map( RedditCorpus,removePunctuation)
+#remove http urls 
+removeURL<- function(x) gsub("http[[:alnum:]]*", "", x)   
+RedditCorpus<- tm_map(RedditCorpus,content_transformer(removeURL))
+#remove remaining http functions
+removeURL<- function(x) gsub("edua[[:alnum:]]*", "", x)   
+RedditCorpus<- tm_map(RedditCorpus,content_transformer(removeURL))
+# remove non "American standard code for information interchange (curly quotes and ellipsis)"
+#  using function from package "textclean"            
+removeNonAscii<-function(x) textclean::replace_non_ascii(x) 
+RedditCorpus<-tm_map(RedditCorpus,content_transformer(removeNonAscii))
+#remove some non essential words
+RedditCorpus<- tm_map(RedditCorpus,removeWords,c("amp","ufef",
+                                                   "ufeft","uufefuufefuufef","uufef","s"))  
+#remove white space
+RedditCorpus<- tm_map(RedditCorpus,stripWhitespace)
+
+# Now inspect the cleaned tweets
+inspect(RedditCorpus[1:10])
+#Sentiment analysis:
+
+# find count of 8 emotions
+emotions<-get_nrc_sentiment(RedditCorpus$content)
+barplot(colSums(emotions),cex.names = .7,
+        col = rainbow(10),
+        main = "Sentiment scores for Reddit titles"
+)
+
+# sentiment positiviy rating
+get_sentiment(RedditCorpus$content[1:10])
+sent<-get_sentiment(RedditCorpus$content)
+
+# mean of sentiment positivity
+meanSent<-mean(sent)
+
+#display the mean of 10000 tweets 
+meanSent
+
