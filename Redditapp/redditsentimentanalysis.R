@@ -16,7 +16,7 @@ kingstonlinks <- reddit_urls(
   page_threshold = 2
 )
 #write into a csv
-write.csv(kingstonlinks,"C:/Users/bhimi/Documents/R/R_proj/R_prog/Redditapp/kingstonlinks.csv")
+write.csv(kingstonlinks,"kingstonlinks.csv")
 #read the csv
 file <- read.csv("kingstonlinks.csv")
 # if looking for specific subreddit use get_reddit command
@@ -49,7 +49,7 @@ RedditCorpus<- tm_map(RedditCorpus,removeWords,c("amp","ufef",
 #remove white space
 RedditCorpus<- tm_map(RedditCorpus,stripWhitespace)
 
-# Now inspect the cleaned tweets
+# Now inspect the cleaned titles
 inspect(RedditCorpus[1:10])
 #Sentiment analysis:
 
@@ -67,6 +67,6 @@ sent<-get_sentiment(RedditCorpus$content)
 # mean of sentiment positivity
 meanSent<-mean(sent)
 
-#display the mean of 10000 tweets 
+#display the mean of Reddit titles 
 meanSent
 
