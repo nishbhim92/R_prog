@@ -77,7 +77,6 @@ RedditCorpus<- tm_map(RedditCorpus,removeWords,c("amp","ufef",
                                                  "ufeft","uufefuufefuufef","uufef","s"))  
 #remove white space
 RedditCorpus<- tm_map(RedditCorpus,stripWhitespace)
-
 # Now inspect the cleaned titles
 inspect(RedditCorpus[1:10])
 
