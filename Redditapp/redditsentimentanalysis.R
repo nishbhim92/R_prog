@@ -72,3 +72,10 @@ meanSent<-mean(sent)
 #display the mean of Reddit titles 
 meanSent
 
+
+# Network analysis
+library("igraph")
+content <- reddit_content(file$URL[1])
+graph <- construct_graph(content, plot = TRUE)
+user <- user_network(content, include_author = TRUE, agg = TRUE)
+user$plot
