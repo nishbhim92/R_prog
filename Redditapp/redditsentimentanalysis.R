@@ -3,9 +3,11 @@
 #install RedditExtractor,tm,syuzhet using 
 #install.packages(RedditExtractoR") for first time use
 library("RedditExtractoR") #load RedditExtractor app
+# https://cran.r-project.org/web/packages/RedditExtractoR/RedditExtractoR.pdf
 library("tm") # tm is text mining library
+# https://cran.r-project.org/web/packages/tm/tm.pdf
 library("syuzhet") #syuzhet is an sentiment analysis library
-
+# https://cran.r-project.org/web/packages/syuzhet/vignettes/syuzhet-vignette.html
 #Extract required reddit links using this command in this case i am searching for "kingston" 
 # Number of pages to be searched for the given term is 2 in this case
 #Adjust number of pages based on your interest
