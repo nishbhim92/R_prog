@@ -21,7 +21,6 @@ library("igraph") #Network analysis library
 # https://igraph.org/r/
 library("tidyverse") # collection of some data science R packages https://www.tidyverse.org/
 
-
 #Extract required reddit links using this command in this case i am searching for "kingston" 
 # Number of pages to be searched for the given term is 2 in this case
 #Adjust number of pages based on your interest
