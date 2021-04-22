@@ -31,9 +31,7 @@ file <- read.csv("kingstonlinks.csv")
 # Url with maximum number of comments
 max_comurl <- file %>% filter(num_comments == max(num_comments))
 
-
-# Network analysis of individual urls from the downloaded data
-# download url content of url 1 from the downloaded data
+# download url content of max comment url from the downloaded data
 url_content <- reddit_content(max_comurl$URL, wait_time = 2)
 write.csv(url_content$comment, "comment_cont.csv", row.names = FALSE)
 file2<-read.csv("comment_cont.csv")
