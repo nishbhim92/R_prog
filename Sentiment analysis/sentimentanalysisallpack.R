@@ -119,7 +119,8 @@ sentiscore<-sentiment(senti1)
 
 ##sentiment score
 sentimentrsentiment <- mean(sentiscore$sentiment)
-##
+
+## display scores
 
 cat("syuzhet\t",syuzhet,"\n")
 cat("afinn\t",afinn,"\n")
