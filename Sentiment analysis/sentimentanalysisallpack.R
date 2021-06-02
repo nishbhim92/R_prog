@@ -4,16 +4,11 @@ setwd("C:/")
 #read the data
 ICOtweets <- read.csv("ABCXYZ.csv")
 
-
-
-
 ###### Clean up data:
 #install.packages("tm")
 #load text mining librabry 
 #tm is text mining library
 library("tm") 
-
-
 
 #Corpus is collection of texts
 twitterCorpus <- Corpus(VectorSource(ICOtweets$text))
@@ -56,17 +51,12 @@ twitterCorpus <- tm_map(twitterCorpus,stripWhitespace)
 # Now inspect the cleaned tweets
 inspect(twitterCorpus[1:10])
 
-
 #########Sentiment analysis:
 
 #syuzhet is an sentiment analysis library contains dictionaries syuzhet, bing, afinn and nrc
 #syuzhet is default dictionary
 #install.packages("syuzhet")
-
-
 library("syuzhet")
-
-
 # find count of 8 emotions
 emotions <- get_nrc_sentiment(twitterCorpus$content)
 anger <- mean(emotions$anger)
@@ -79,7 +69,6 @@ surprise <- mean(emotions$surprise)
 trust <- mean(emotions$trust)
 positive <- mean(emotions$positive)
 negative <- mean(emotions$negative)
-
 
 # sentiment positiviy rating
 get_sentiment(twitterCorpus$content[1:10])
@@ -121,7 +110,6 @@ sentiscore<-sentiment(senti1)
 sentimentrsentiment <- mean(sentiscore$sentiment)
 
 ## display scores
-
 cat("syuzhet\t",syuzhet,"\n")
 cat("afinn\t",afinn,"\n")
 cat("bing\t",bing,"\n")
@@ -140,6 +128,5 @@ cat("negative\t",negative,"\n")
 
 # save the scores in dataframe
 score <- tibble(syuzhet,afinn,bing,nrc,sentimentrsentiment,anger,anticipation,disgust,fear,joy,sadness,surprise,trust,positive,negative)
-
 #copy the dataframe to clipboard to paste in excel
 write.table(score, "clipboard", sep="\t", row.names=FALSE, col.names=FALSE)
