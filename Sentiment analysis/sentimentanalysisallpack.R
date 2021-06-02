@@ -139,7 +139,7 @@ cat("positive\t",positive,"\n")
 cat("negative\t",negative,"\n")
 
 # save the scores in dataframe
-score <- tibble(a,syuzhet,afinn,bing,nrc,sentimentrsentiment,anger,anticipation,disgust,fear,joy,sadness,surprise,trust,positive,negative)
+score <- tibble(syuzhet,afinn,bing,nrc,sentimentrsentiment,anger,anticipation,disgust,fear,joy,sadness,surprise,trust,positive,negative)
 
 #copy the dataframe to clipboard to paste in excel
 write.table(score, "clipboard", sep="\t", row.names=FALSE, col.names=FALSE)
