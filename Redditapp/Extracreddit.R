@@ -9,12 +9,6 @@
 library("RedditExtractoR") #load RedditExtractor app
 # https://cran.r-project.org/web/packages/RedditExtractoR/RedditExtractoR.pdf
 
-library("tm") # tm is text mining library
-# https://cran.r-project.org/web/packages/tm/tm.pdf
-
-library("syuzhet") #syuzhet is an sentiment analysis library
-# https://cran.r-project.org/web/packages/syuzhet/vignettes/syuzhet-vignette.html
-
 library("tidyverse") # collection of some data science R packages https://www.tidyverse.org/
 
 #Extract required reddit links using this command in this case i am searching for "kingston" 
