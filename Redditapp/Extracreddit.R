@@ -1,10 +1,7 @@
-#Install R and R studio 
-# https://cran.r-project.org/bin/windows/base/
-# https://www.rstudio.com/products/rstudio/download/ 
 #Working directory, set your working directory path and app name using setwd
 #setwd("C:/Users/####/####/Redditapp/") or your preferred path
 
-#install RedditExtractor,tm,syuzhet using 
+#install RedditExtractor
 #install.packages(RedditExtractoR") for first time use
 library("RedditExtractoR") #load RedditExtractor app
 # https://cran.r-project.org/web/packages/RedditExtractoR/RedditExtractoR.pdf
