@@ -1,2 +1,4 @@
 # R_prog
-This repository contains files related to social media data downloads (Twitter and Reddit) and Sentiment analysis in R programming.
+Hi,
+I am a social sciences research student. 
+This repository consists of code related to R programming. 
