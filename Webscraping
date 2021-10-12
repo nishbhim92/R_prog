@@ -1,0 +1,62 @@
+# The data generated in this code is dependent on using selectorgadget extension in browser of choice
+#selector gadget helps in selecting html elements from each website
+
+# Scraping data from a website
+library(rvest) #library for scraping web pages
+library(dplyr) #library for dataframe manipulation
+
+#Example of scraping data from https://icobench.com/ 
+#Build a function to scrape all the webpages to icobench to get data related to amount raised by each ico
+# Amount raised is resulted through ".raised" in the selector gadget
+#It is similar with country, start date and enddate
+get_financials = function(ico_link) {
+  ico_page = read_html(ico_link)
+  ico_raised = ico_page %>% html_nodes(".raised") %>% 
+    html_text() %>% paste(collapse = ",")
+  return(ico_raised)
+}
+
+#Build a function for getting country of each ico
+get_country = function(ico_link) {
+  ico_page = read_html(ico_link)
+  ico_country = ico_page %>% html_nodes(".data_row:nth-child(14) a") %>% 
+    html_text() %>% paste(collapse = ",")
+  return(ico_country)
+}
+
+
+
+icobench1 = data.frame()
+#link = "https://icobench.com/icos?"
+
+# scrape results from page 1 to page 478 in the https://icobench.com/icos?page=
+#results include name of ico, start date, end date, financials and country of wach ico
+for(page_result in seq(from = 1, to = 478, by =1)) {
+  link = paste0("https://icobench.com/icos?page=",page_result ,"")
+  
+  page = read_html(link)
+  
+  name = page %>% html_nodes(".name") %>% html_text()
+  ico_links = page %>% html_nodes(".name") %>% 
+    html_attr("href") %>% paste("https://icobench.com", .,sep = "")
+  startdate = page %>% html_nodes(".ico_data+ td") %>% html_text()
+  enddate = page %>% html_nodes("td:nth-child(3)") %>% html_text()
+  synopsis = page %>% html_nodes("#category p") %>% html_text()
+  
+  financials = sapply(ico_links, FUN = get_financials, USE.NAMES = FALSE)
+  
+  icocountry = sapply(ico_links, FUN = get_country, USE.NAMES = FALSE)
+  
+  icobench1 = rbind(icobench1, data.frame(name,startdate,enddate,financials,icocountry,synopsis,stringsAsFactors = FALSE))
+  
+  print(paste("Page:",page_result))
+}
+
+
+icobench1$financials <- gsub("~","", as.character(icobench1$financials))
+icobench1$financials <- gsub(",","", paste(icobench1$financials))
+icobench1$financials <- gsub("$","", as.character(icobench1$financials))
+icobench1
+setwd("C:/Users/bhimi/Documents/R/R_proj/R_prog/")
+library("tidyverse")
+write.csv(icobench1,"icobench1.csv")
